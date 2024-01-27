@@ -1,7 +1,7 @@
 import pygame
 import pygame_gui
 from sys import exit
-from .sidebar import Sidebar
+from .ui.sidebar import Sidebar
 
 # Constants
 WINDOW_TITLE = "Sorting Algorithm Visualizer"
@@ -20,9 +20,9 @@ class Game:
         self.gui_manager = pygame_gui.UIManager(DEFAULT_DISPLAY_SIZE)
         self.clock = pygame.time.Clock()
 
-        self.background = self._create_background(
-            DEFAULT_DISPLAY_SIZE, DEFAULT_BACKGROUND_COLOR
-        )
+        # self.background = self._create_background(
+        #    DEFAULT_DISPLAY_SIZE, DEFAULT_BACKGROUND_COLOR
+        # )
         self.sidebar = Sidebar(pygame, self.gui_manager)
 
     # Start game loop
@@ -32,10 +32,10 @@ class Game:
             self._game_logic()
             self._draw()
 
-    def _create_background(self, size: tuple, color: tuple) -> pygame.Surface:
-        background = pygame.Surface(size)
-        background.fill(color)
-        return background
+    # def _create_background(self, size: tuple, color: tuple) -> pygame.Surface:
+    #    background = pygame.Surface(size)
+    #    background.fill(color)
+    #    return background
 
     # Handle user input and I/O
     def _handle_input(self) -> None:
@@ -57,7 +57,7 @@ class Game:
 
     # Updates display ever frame
     def _draw(self) -> None:
-        self.display.blit(self.background, (0, 0))
+        # self.display.blit(self.background, (0, 0))
 
         self.sidebar.draw()
 

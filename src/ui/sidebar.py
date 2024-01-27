@@ -1,5 +1,6 @@
 import pygame
 import pygame_gui
+from .elements import *
 from .colors import *
 
 
@@ -9,7 +10,9 @@ class Sidebar:
         self.gui_manager = gui_manager
 
         self.surface = self._create_surface()
-        self.test_button = self._create_button((25, 50), (100, 50), "Button")
+        self.test_button = create_button(
+            self.gui_manager, (25, 50), (100, 50), "Button"
+        )
 
     def _create_surface(self) -> pygame.surface:
         display_info = self.p_game.display.Info()
@@ -20,19 +23,13 @@ class Sidebar:
         surface.fill(LIGHT_GREY)
         return surface
 
-    def _create_button(
-        self, location: tuple, size: tuple, text: str
-    ) -> pygame_gui.elements.UIButton:
-        return pygame_gui.elements.UIButton(
-            relative_rect=pygame.Rect(location, size),
-            text=text,
-            manager=self.gui_manager,
+    def handle_input(self, game_event: pygame.Event) -> None:
+        handle_button_event(
+            button=self.test_button,
+            game_event=game_event,
+            button_event=pygame_gui.UI_BUTTON_PRESSED,
+            callback=lambda: print("hello world"),
         )
-
-    def handle_input(self, event: pygame.Event) -> None:
-        if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == self.test_button:
-                print("hello world")
 
     def draw(self) -> None:
         display = self.p_game.display.get_surface()
