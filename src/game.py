@@ -1,13 +1,13 @@
-import pygame
-import pygame_gui
+import pygame, pygame_gui, os
 from sys import exit
 from .ui.sidebar import Sidebar
 
 # Constants
 WINDOW_TITLE = "Sorting Algorithm Visualizer"
 DEFAULT_DISPLAY_SIZE = (800, 600)
-DEFAULT_BACKGROUND_COLOR = "white"
+DEFAULT_BACKGROUND_COLOR = "black"
 FRAME_RATE = 60
+THEME_PATH = f"{os.path.dirname(os.path.realpath(__file__))}\\ui\\theme.json"
 
 
 class Game:
@@ -17,7 +17,7 @@ class Game:
 
         # Initialize Pygame and set window title
         self.display = pygame.display.set_mode(DEFAULT_DISPLAY_SIZE, pygame.RESIZABLE)
-        self.gui_manager = pygame_gui.UIManager(DEFAULT_DISPLAY_SIZE)
+        self.gui_manager = pygame_gui.UIManager(DEFAULT_DISPLAY_SIZE, THEME_PATH)
         self.clock = pygame.time.Clock()
 
         # Create background surface
@@ -34,6 +34,7 @@ class Game:
             self._handle_input()
             self._game_logic()
             self._draw()
+        pygame.quit()
 
     def _create_background(self, size: tuple, color: tuple) -> pygame.Surface:
         background = pygame.Surface(size)

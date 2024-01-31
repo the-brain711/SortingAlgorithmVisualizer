@@ -1,5 +1,4 @@
 import pygame, pygame_gui
-from .colors import *
 
 
 # Constants
@@ -16,7 +15,7 @@ class ColorPicker:
         text: str = "",
         tooltip_text: str = "",
         anchors: dict[str, str] = None,
-        default_color: tuple = WHITE,
+        default_color: tuple = (255, 255, 255),
     ) -> None:
         self.gui_manager = gui_manager
 
@@ -68,15 +67,6 @@ class ColorPicker:
         ):
             self.pick_color_button.enable()
             self.color_picker_dialog = None
-
-    def add_event(
-        ui_element: any,
-        game_event: pygame.Event,
-        ui_element_event: int,
-        callback: lambda x: x,
-    ) -> None:
-        if game_event.type == ui_element_event and game_event.ui_element == ui_element:
-            callback()
 
     def draw(self, display: any) -> None:
         x = self.picked_color_box_location[0]
