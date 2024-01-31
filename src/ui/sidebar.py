@@ -10,8 +10,17 @@ class Sidebar:
         self.gui_manager = gui_manager
         self.surface = self._create_surface()
 
-        self.color_picker = ColorPicker(
-            gui_manager=gui_manager, location=(10, 10), size=(100, 50), text="Bar Color"
+        self.bar_color_picker = ColorPicker(
+            gui_manager=gui_manager,
+            location=(10, 10),
+            text="Bar",
+            tooltip_text="Change Bar Color",
+        )
+        self.background_color_picker = ColorPicker(
+            gui_manager=gui_manager,
+            location=(10, 80),
+            text="Background",
+            tooltip_text="Change Background Color",
         )
 
     def _create_surface(self) -> pygame.surface:
@@ -24,9 +33,11 @@ class Sidebar:
         return surface
 
     def handle_input(self, event: pygame.Event) -> None:
-        self.color_picker.handle_color_picker_events(event, "Change Bar Color")
+        self.bar_color_picker.run(event, "Change Bar Color")
+        self.background_color_picker.run(event, "Change Background Color")
 
     def draw(self) -> None:
         display = self.p_game.display.get_surface()
         display.blit(self.surface, (0, 0))
-        self.color_picker.draw(display)
+        self.bar_color_picker.draw(display)
+        self.background_color_picker.draw(display)

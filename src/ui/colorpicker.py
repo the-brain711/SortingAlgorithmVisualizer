@@ -3,6 +3,7 @@ from .colors import *
 
 
 # Constants
+PICK_COLOR_BUTTON_SIZE = (110, 50)
 PICKED_COLOR_BOX_SIZE = (50, 50)
 
 
@@ -10,9 +11,10 @@ class ColorPicker:
     def __init__(
         self,
         gui_manager: pygame_gui,
-        location: tuple,
-        size: tuple,
+        location: tuple = (0, 0),
+        size: tuple = PICK_COLOR_BUTTON_SIZE,
         text: str = "",
+        tooltip_text: str = "",
         anchors: dict[str, str] = None,
         default_color: tuple = WHITE,
     ) -> None:
@@ -22,6 +24,7 @@ class ColorPicker:
             manager=gui_manager,
             relative_rect=pygame.Rect(location, size),
             text=text,
+            tool_tip_text=tooltip_text,
             anchors=anchors,
         )
 
@@ -32,7 +35,7 @@ class ColorPicker:
         self.picked_color_box.fill(self.current_color)
         self.picked_color_box_location = location
 
-    def handle_color_picker_events(
+    def run(
         self,
         event: pygame.Event,
         window_title: str,
@@ -51,11 +54,14 @@ class ColorPicker:
             self.pick_color_button.disable()
 
         # When a user chooses a color and clicks "ok" on the color picker dialog
-        if event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED:
+        if (
+            event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
+            and event.ui_element == self.color_picker_dialog
+        ):
             self.current_color = event.colour
             self.picked_color_box.fill(self.current_color)
 
-        #
+        # When a user closes the color picker dialog
         if (
             event.type == pygame_gui.UI_WINDOW_CLOSE
             and event.ui_element == self.color_picker_dialog
@@ -63,9 +69,18 @@ class ColorPicker:
             self.pick_color_button.enable()
             self.color_picker_dialog = None
 
+    def add_event(
+        ui_element: any,
+        game_event: pygame.Event,
+        ui_element_event: int,
+        callback: lambda x: x,
+    ) -> None:
+        if game_event.type == ui_element_event and game_event.ui_element == ui_element:
+            callback()
+
     def draw(self, display: any) -> None:
         x = self.picked_color_box_location[0]
         y = self.picked_color_box_location[1]
-        location = (x + (PICKED_COLOR_BOX_SIZE[0] * 2) + 10, y)
+        location = (x + (PICKED_COLOR_BOX_SIZE[0] * 2) + 20, y)
 
         display.blit(self.picked_color_box, location)
