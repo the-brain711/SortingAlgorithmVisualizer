@@ -30,6 +30,15 @@
             "disabled_text_shadow": "#10101070",
             "selected_text_shadow": "#10101070",
             "active_text_shadow": "#10101070"
+        },
+        "font": {
+            "size": "12"
+        }
+    },
+    "@title": {
+        "font": {
+            "bold": "1",
+            "size": "14"
         }
     }
 }

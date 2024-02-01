@@ -8,6 +8,7 @@ class NumberSlider:
     def __init__(
         self,
         gui_manager: pygame_gui,
+        title_label: str,
         location: tuple = (0, 0),
         size: tuple = SLIDER_SIZE,
         value_range: tuple = (10, 100),
@@ -16,9 +17,15 @@ class NumberSlider:
     ) -> None:
         self.gui_manager = gui_manager
 
-        self.label = pygame_gui.elements.UILabel(
+        self.title_label = pygame_gui.elements.UILabel(
             manager=gui_manager,
-            relative_rect=pygame.Rect(((size[0] / 2) + 20, location[1]), (-1, -1)),
+            relative_rect=pygame.Rect((location[0], location[1]), (-1, -1)),
+            text=title_label,
+        )
+
+        self.slider_value_label = pygame_gui.elements.UILabel(
+            manager=gui_manager,
+            relative_rect=pygame.Rect(((size[0] / 2) + 30, location[1]), (-1, -1)),
             text=str(start_value),
         )
 
@@ -35,4 +42,4 @@ class NumberSlider:
             event.type == pygame_gui.UI_HORIZONTAL_SLIDER_MOVED
             and event.ui_element == self.slider
         ):
-            self.label.set_text(str(event.value))
+            self.slider_value_label.set_text(str(event.value))

@@ -11,29 +11,32 @@ class Sidebar:
         self.surface = self._create_surface()
         center_x = self.surface.get_width() * 0.125
 
-        self.menu_title = pygame_gui.elements.UILabel(
+        self.sidebar_title = pygame_gui.elements.UILabel(
             manager=gui_manager,
-            relative_rect=pygame.Rect((10, 10), (-1, -1)),
+            relative_rect=pygame.Rect((10, 20), (-1, -1)),
             text="Sorting Algorithm Visualizer",
+            object_id=pygame_gui.core.ObjectID(
+                class_id="@title", object_id="#sidebar_title"
+            ),
         )
 
         self.bar_color_picker = ColorPicker(
             gui_manager=gui_manager,
-            location=(center_x, 50),
+            location=(center_x, 70),
             text="Bar",
             tooltip_text="Change Bar Color",
             default_color=(255, 255, 255),
         )
         self.background_color_picker = ColorPicker(
             gui_manager=gui_manager,
-            location=(center_x, 120),
+            location=(center_x, 140),
             text="Background",
             tooltip_text="Change Background Color",
             default_color=(0, 0, 0),
         )
 
         self.number_slider = NumberSlider(
-            gui_manager=gui_manager, location=(center_x, 250)
+            gui_manager=gui_manager, title_label="Bar Count:", location=(center_x, 230)
         )
 
     def _create_surface(self) -> pygame.surface:
