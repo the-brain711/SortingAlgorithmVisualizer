@@ -1,6 +1,7 @@
 import pygame
 import pygame_gui
 from .colorpicker import ColorPicker
+from .numberslider import NumberSlider
 
 
 class Sidebar:
@@ -8,7 +9,7 @@ class Sidebar:
         self.p_game = p_game
         self.gui_manager = gui_manager
         self.surface = self._create_surface()
-        button_x = self.surface.get_width() * 0.125
+        center_x = self.surface.get_width() * 0.125
 
         self.menu_title = pygame_gui.elements.UILabel(
             manager=gui_manager,
@@ -18,17 +19,21 @@ class Sidebar:
 
         self.bar_color_picker = ColorPicker(
             gui_manager=gui_manager,
-            location=(button_x, 50),
+            location=(center_x, 50),
             text="Bar",
             tooltip_text="Change Bar Color",
             default_color=(255, 255, 255),
         )
         self.background_color_picker = ColorPicker(
             gui_manager=gui_manager,
-            location=(button_x, 120),
+            location=(center_x, 120),
             text="Background",
             tooltip_text="Change Background Color",
             default_color=(0, 0, 0),
+        )
+
+        self.number_slider = NumberSlider(
+            gui_manager=gui_manager, location=(center_x, 250)
         )
 
     def _create_surface(self) -> pygame.surface:
@@ -49,6 +54,8 @@ class Sidebar:
             and event.ui_element == self.background_color_picker.color_picker_dialog
         ):
             print("background change color")
+
+        self.number_slider.run(event)
 
     def draw(self) -> None:
         display = self.p_game.display.get_surface()
