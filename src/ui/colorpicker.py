@@ -31,9 +31,6 @@ class ColorPicker:
         self.color_picker_dialog = None
 
         # Create box to display picked color
-        self._create_picked_color_box(location)
-
-    def _create_picked_color_box(self, location: tuple) -> None:
         self.picked_color_box = pygame.Surface(PICKED_COLOR_BOX_SIZE)
         self.picked_color_box.fill(self.current_color)
         self.picked_color_box_location = location

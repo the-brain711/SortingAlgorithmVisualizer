@@ -15,7 +15,7 @@ class NumberSlider:
         start_value: int = 25,
         click_increment: int = 1,
     ) -> None:
-        self.gui_manager = gui_manager
+        self._gui_manager = gui_manager
 
         self.title_label = pygame_gui.elements.UILabel(
             manager=gui_manager,
