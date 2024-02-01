@@ -17,8 +17,10 @@ class ColorPicker:
         anchors: dict[str, str] = None,
         default_color: tuple = (255, 255, 255),
     ) -> None:
-        self.gui_manager = gui_manager
+        self._gui_manager = gui_manager
+        self.current_color = pygame.Color(default_color)
 
+        # Create button to display color picker dialog
         self.pick_color_button = pygame_gui.elements.UIButton(
             manager=gui_manager,
             relative_rect=pygame.Rect(location, size),
@@ -26,10 +28,12 @@ class ColorPicker:
             tool_tip_text=tooltip_text,
             anchors=anchors,
         )
-
         self.color_picker_dialog = None
 
-        self.current_color = pygame.Color(default_color)
+        # Create box to display picked color
+        self._create_picked_color_box(location)
+
+    def _create_picked_color_box(self, location: tuple) -> None:
         self.picked_color_box = pygame.Surface(PICKED_COLOR_BOX_SIZE)
         self.picked_color_box.fill(self.current_color)
         self.picked_color_box_location = location
@@ -45,7 +49,7 @@ class ColorPicker:
             and event.ui_element == self.pick_color_button
         ):
             self.color_picker_dialog = pygame_gui.windows.UIColourPickerDialog(
-                manager=self.gui_manager,
+                manager=self._gui_manager,
                 rect=pygame.Rect((50, 50), (390, 390)),
                 window_title=window_title,
                 initial_colour=self.current_color,

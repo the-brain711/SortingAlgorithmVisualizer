@@ -105,7 +105,9 @@ class Sidebar:
             event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
             and event.ui_element == self.background_color_picker.color_picker_dialog
         ):
-            print("background change color")
+            print(
+                f"background change color: {self.background_color_picker.current_color}"
+            )
 
         self.number_slider.run(event)
 
