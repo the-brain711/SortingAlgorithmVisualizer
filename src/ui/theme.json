@@ -6,6 +6,9 @@
             "selected_text": "#000000",
             "disabled_text": "#000000",
             "active_text": "#000000"
+        },
+        "font": {
+            "size": "12"
         }
     },
     "button": {
@@ -37,7 +40,7 @@
     },
     "@title": {
         "font": {
-            "bold": "1",
+            "bold": "0",
             "size": "14"
         }
     }

@@ -21,6 +21,9 @@ class NumberSlider:
             manager=gui_manager,
             relative_rect=pygame.Rect((location[0], location[1]), (-1, -1)),
             text=title_label,
+            object_id=pygame_gui.core.ObjectID(
+                class_id="@title", object_id=f"#{title_label}"
+            ),
         )
 
         self.slider_value_label = pygame_gui.elements.UILabel(
