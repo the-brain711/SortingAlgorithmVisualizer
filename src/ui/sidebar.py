@@ -99,20 +99,10 @@ class Sidebar:
 
     def handle_input(self, event: pygame.Event) -> None:
         self.bar_color_picker.run(event, "Change Bar Color")
-
         self.background_color_picker.run(event, "Change Background Color")
-        if (
-            event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
-            and event.ui_element == self.background_color_picker.color_picker_dialog
-        ):
-            print(
-                f"background change color: {self.background_color_picker.current_color}"
-            )
-
         self.number_slider.run(event)
 
-    def draw(self) -> None:
-        display = self._pygame.display.get_surface()
+    def draw(self, display: any) -> None:
         display.blit(self._surface, (0, 0))
         self.bar_color_picker.draw(display)
         self.background_color_picker.draw(display)
