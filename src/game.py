@@ -1,6 +1,7 @@
 import pygame, pygame_gui, os
 from sys import exit
 from .ui.sidebar import Sidebar
+from .sorting_algorithm import SortingAlgorithm
 
 # Constants
 WINDOW_TITLE = "Sorting Algorithm Visualizer"
@@ -16,17 +17,23 @@ class Game:
         pygame.display.set_caption(WINDOW_TITLE)
 
         # Initialize Pygame and set window title
-        self.display = pygame.display.set_mode(DEFAULT_DISPLAY_SIZE, pygame.RESIZABLE)
-        self.gui_manager = pygame_gui.UIManager(DEFAULT_DISPLAY_SIZE, THEME_PATH)
-        self.clock = pygame.time.Clock()
+        self._display = pygame.display.set_mode(DEFAULT_DISPLAY_SIZE, pygame.RESIZABLE)
+        self._gui_manager = pygame_gui.UIManager(DEFAULT_DISPLAY_SIZE, THEME_PATH)
+        self._clock = pygame.time.Clock()
 
-        # Create background surface
-        self.background = self._create_background(
-            DEFAULT_DISPLAY_SIZE, DEFAULT_BACKGROUND_COLOR
+        # Create surface background for entire program
+        self._background_surface = self._create_surface()
+
+        # Create surface to draw bars on
+        self._bar_surface = self._create_surface(
+            size=(self._display.get_width() * 0.7, self._display.get_height())
         )
 
         # Load sidebar menu
-        self.sidebar = Sidebar(pygame, self.gui_manager)
+        self._sidebar = Sidebar(pygame, self._gui_manager)
+
+        # Load sorting algorithm class to sort bars
+        # self._sorting_algorithm = SortingAlgorithm(pygame)
 
     # Start game loop
     def start(self) -> None:
@@ -36,24 +43,40 @@ class Game:
             self._draw()
         pygame.quit()
 
-    def _create_background(self, size: tuple, color: tuple) -> pygame.Surface:
+    def _create_surface(
+        self,
+        size: tuple = DEFAULT_DISPLAY_SIZE,
+        color: tuple = DEFAULT_BACKGROUND_COLOR,
+    ) -> pygame.Surface:
         background = pygame.Surface(size)
         background.fill(color)
         return background
 
     # Handle user input and I/O
     def _handle_input(self) -> None:
-        time_delta = self.clock.tick(FRAME_RATE) / 1000.0
+        time_delta = self._clock.tick(FRAME_RATE) / 1000.0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
 
-            self.sidebar.handle_input(event)
+            self._sidebar.handle_input(event)
 
-            self.gui_manager.process_events(event)
-        self.gui_manager.update(time_delta)
+            # Change background color user selects new color from color dialog
+            self._change_background_color_event(event)
+
+            self._gui_manager.process_events(event)
+        self._gui_manager.update(time_delta)
+
+    def _change_background_color_event(self, event: pygame.Event) -> None:
+        background_color_picker = self._sidebar.background_color_picker
+
+        if (
+            event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
+            and event.ui_element == background_color_picker.color_picker_dialog
+        ):
+            self._bar_surface.fill(background_color_picker.current_color)
 
     # Where sorting algorithm logic goes
     def _game_logic(self) -> None:
@@ -61,9 +84,12 @@ class Game:
 
     # Updates display ever frame
     def _draw(self) -> None:
-        self.display.blit(self.background, (0, 0))
+        # Draw background and bar surface
+        self._display.blit(self._background_surface, (0, 0))
+        self._display.blit(self._bar_surface, (self._display.get_width() * 0.3, 0))
 
-        self.sidebar.draw()
+        # Draw sidebar menu
+        self._sidebar.draw(self._display)
 
-        self.gui_manager.draw_ui(self.display)
+        self._gui_manager.draw_ui(self._display)
         pygame.display.update()
