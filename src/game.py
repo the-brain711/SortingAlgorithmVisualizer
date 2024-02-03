@@ -1,6 +1,7 @@
 import pygame, pygame_gui, os
 from sys import exit
 from .ui.sidebar import Sidebar
+from .bars import Bars
 from .sorting_algorithm import SortingAlgorithm
 
 # Constants
@@ -28,6 +29,7 @@ class Game:
         self._bar_surface = self._create_surface(
             size=(self._display.get_width() * 0.7, self._display.get_height())
         )
+        self._bars = Bars(pygame, self._bar_surface)
 
         # Load sidebar menu
         self._sidebar = Sidebar(pygame, self._gui_manager)
@@ -41,7 +43,6 @@ class Game:
             self._handle_input()
             self._game_logic()
             self._draw()
-        pygame.quit()
 
     def _create_surface(
         self,
@@ -66,6 +67,8 @@ class Game:
             # Change background color user selects new color from color dialog
             self._change_background_color_event(event)
 
+            self._generate_bars_event(event)
+
             self._gui_manager.process_events(event)
         self._gui_manager.update(time_delta)
 
@@ -77,6 +80,19 @@ class Game:
             and event.ui_element == background_color_picker.color_picker_dialog
         ):
             self._bar_surface.fill(background_color_picker.current_color)
+
+    def _generate_bars_event(self, event: pygame.Event) -> None:
+        if (
+            event.type == pygame_gui.UI_BUTTON_PRESSED
+            and event.ui_element == self._sidebar.generate_button
+        ):
+            bar_count = self._sidebar.number_slider.slider.get_current_value()
+            color = self._sidebar.bar_color_picker.current_color
+
+            self._bars.generate(
+                color=color,
+                bar_count=bar_count,
+            )
 
     # Where sorting algorithm logic goes
     def _game_logic(self) -> None:

@@ -24,6 +24,8 @@ class Sidebar:
             gui_manager=gui_manager,
             title_label="Bar Count:",
             location=(self._center_x, 300),
+            value_range=(20, 60),
+            start_value=20,
         )
 
         # Create start and generate buttons
