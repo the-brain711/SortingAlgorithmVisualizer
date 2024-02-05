@@ -10,7 +10,7 @@ class Bars:
 
     # Generates a random list of integers to be sorted
     def generate_bars_list(self, bar_count: int) -> list[int]:
-        max_bar_height = self._height - 100
+        max_bar_height = self._height - 10
         random.seed()
         return [random.randint(10, max_bar_height) for i in range(bar_count)]
 
