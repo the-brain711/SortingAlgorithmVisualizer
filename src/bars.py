@@ -10,8 +10,9 @@ class Bars:
 
     # Generates a random list of integers to be sorted
     def generate_bars_list(self, bar_count: int) -> list[int]:
+        max_bar_height = self._height - 100
         random.seed()
-        return [random.randint(1, self._height) for i in range(bar_count)]
+        return [random.randint(10, max_bar_height) for i in range(bar_count)]
 
     def draw(self, bars_list: list[int], color: tuple) -> None:
         bar_count = len(bars_list)
@@ -19,12 +20,20 @@ class Bars:
         bar_space = 1
 
         for i, bar_height in enumerate(bars_list):
-            location_x = i * (self._width / bar_count)
+            location_x = i * ((self._width - (side_padding * 2)) / bar_count)
             location_y = self._height - bar_height
             bar_width = ((self._width - (side_padding * 2)) / bar_count) - bar_space
 
-            pygame.draw.rect(
-                surface=self._surface,
-                color=color,
-                rect=(location_x, location_y, bar_width, bar_height),
-            )
+            if i == 0:
+                location_x = (self._width - (side_padding * 2)) / bar_count
+                pygame.draw.rect(
+                    surface=self._surface,
+                    color=color,
+                    rect=(location_x, location_y, bar_width, bar_height),
+                )
+            else:
+                pygame.draw.rect(
+                    surface=self._surface,
+                    color=color,
+                    rect=(location_x, location_y, bar_width, bar_height),
+                )

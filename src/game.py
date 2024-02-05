@@ -111,11 +111,14 @@ class Game:
             event.type == pygame_gui.UI_BUTTON_PRESSED
             and event.ui_element == self._sidebar.generate_button
         ):
+            background_color = self._sidebar.background_color_picker.current_color
+            self._bar_surface.fill(background_color)
+
             bar_count = self._sidebar.number_slider.slider.get_current_value()
-            color = self._sidebar.bar_color_picker.current_color
+            bar_color = self._sidebar.bar_color_picker.current_color
 
             self._bars_list = self._bars.generate_bars_list(bar_count)
-            self._bars.draw(self._bars_list, color)
+            self._bars.draw(self._bars_list, bar_color)
 
     # Where sorting algorithm logic goes
     def _game_logic(self) -> None:
