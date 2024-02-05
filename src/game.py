@@ -89,10 +89,8 @@ class Game:
             bar_count = self._sidebar.number_slider.slider.get_current_value()
             color = self._sidebar.bar_color_picker.current_color
 
-            self._bars.generate(
-                color=color,
-                bar_count=bar_count,
-            )
+            bars_list = self._bars.generate_bars_list(bar_count)
+            self._bars.draw(bars_list, color)
 
     # Where sorting algorithm logic goes
     def _game_logic(self) -> None:

@@ -87,14 +87,14 @@ class Sidebar:
     def _create_buttons(self) -> None:
         self.generate_button = pygame_gui.elements.UIButton(
             manager=self._gui_manager,
-            relative_rect=pygame.Rect((self._center_x + 30, 420), (110, 50)),
-            text="Generate",
-            tool_tip_text="Generate New Bars",
+            relative_rect=pygame.Rect((self._center_x + 25, 420), (130, 50)),
+            text="Generate/Reset",
+            tool_tip_text="Generate/Reset Bars",
         )
 
         self.start_button = pygame_gui.elements.UIButton(
             manager=self._gui_manager,
-            relative_rect=pygame.Rect((self._center_x + 30, 480), (110, 50)),
+            relative_rect=pygame.Rect((self._center_x + 25, 480), (130, 50)),
             text="Start",
             tool_tip_text="Start Sorting Bars",
         )
