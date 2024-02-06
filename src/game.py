@@ -1,6 +1,7 @@
 import pygame, pygame_gui, os
 from sys import exit
 from .ui.sidebar import Sidebar
+from .bars import Bars
 from .sorting_algorithm import SortingAlgorithm
 
 # Constants
@@ -28,6 +29,8 @@ class Game:
         self._bar_surface = self._create_surface(
             size=(self._display.get_width() * 0.7, self._display.get_height())
         )
+        self._bars_list = []
+        self._bars = Bars(pygame, self._bar_surface)
 
         # Load sidebar menu
         self._sidebar = Sidebar(pygame, self._gui_manager)
@@ -41,7 +44,6 @@ class Game:
             self._handle_input()
             self._game_logic()
             self._draw()
-        pygame.quit()
 
     def _create_surface(
         self,
@@ -63,11 +65,33 @@ class Game:
 
             self._sidebar.handle_input(event)
 
-            # Change background color user selects new color from color dialog
+            # Change bar color when user selects new color from color dialog
+            self._change_bar_color_event(event)
+
+            # Change background color when user selects new color from color dialog
             self._change_background_color_event(event)
+
+            # Generates new set of bars for sorting when generate/reset button is clicked
+            self._generate_bars_event(event)
 
             self._gui_manager.process_events(event)
         self._gui_manager.update(time_delta)
+
+    def _change_bar_color_event(self, event: pygame.Event):
+        bar_color_picker = self._sidebar.bar_color_picker
+
+        if (
+            event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
+            and event.ui_element == bar_color_picker.color_picker_dialog
+            and self._bars_list != None
+            and self._bars_list != 0
+        ):
+            # Redraw entire screen and then redraw bars
+            background_color = self._sidebar.background_color_picker.current_color
+            bar_color = bar_color_picker.current_color
+
+            self._bar_surface.fill(background_color)
+            self._bars.draw(self._bars_list, bar_color)
 
     def _change_background_color_event(self, event: pygame.Event) -> None:
         background_color_picker = self._sidebar.background_color_picker
@@ -76,7 +100,25 @@ class Game:
             event.type == pygame_gui.UI_COLOUR_PICKER_COLOUR_PICKED
             and event.ui_element == background_color_picker.color_picker_dialog
         ):
+            # Redraw entire screen with new background color and then redraw bars
             self._bar_surface.fill(background_color_picker.current_color)
+            if self._bars_list != None or len(self._bars_list) != 0:
+                color = self._sidebar.bar_color_picker.current_color
+                self._bars.draw(self._bars_list, color)
+
+    def _generate_bars_event(self, event: pygame.Event) -> None:
+        if (
+            event.type == pygame_gui.UI_BUTTON_PRESSED
+            and event.ui_element == self._sidebar.generate_button
+        ):
+            background_color = self._sidebar.background_color_picker.current_color
+            self._bar_surface.fill(background_color)
+
+            bar_count = self._sidebar.number_slider.slider.get_current_value()
+            bar_color = self._sidebar.bar_color_picker.current_color
+
+            self._bars_list = self._bars.generate_bars_list(bar_count)
+            self._bars.draw(self._bars_list, bar_color)
 
     # Where sorting algorithm logic goes
     def _game_logic(self) -> None:
