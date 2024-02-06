@@ -107,7 +107,9 @@ class Game:
             bar_color = bar_color_picker.current_color
 
             self._bar_surface.fill(background_color)
-            self._bars.draw(self._bars_list, bar_color)
+
+            self._is_render = True
+            self._render_generator = self._render(self._bars_list, bar_color)
 
     def _change_background_color_event(self, event: pygame.Event) -> None:
         background_color_picker = self._sidebar.background_color_picker
@@ -119,8 +121,10 @@ class Game:
             # Redraw entire screen with new background color and then redraw bars
             self._bar_surface.fill(background_color_picker.current_color)
             if self._bars_list != None or len(self._bars_list) != 0:
-                color = self._sidebar.bar_color_picker.current_color
-                self._bars.draw(self._bars_list, color)
+                bar_color = self._sidebar.bar_color_picker.current_color
+
+                self._is_render = True
+                self._render_generator = self._render(self._bars_list, bar_color)
 
     def _generate_bars_event(self, event: pygame.Event) -> None:
         if (
