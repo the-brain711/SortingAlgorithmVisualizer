@@ -6,5 +6,7 @@ It will generate a specified amount of bars of randomized heights. It will then 
 
 ## Future Plans
 - Install/Run Instructions
-- YouTube video demostration
-- Support for more sorting algorithms 
+- Support for more sorting algorithms
+
+## Video Demonstration
+https://github.com/the-brain711/SortingAlgorithmVisualizer/assets/44927554/d14fadb7-6648-4df6-9a16-0f87931a664f
