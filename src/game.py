@@ -6,6 +6,7 @@ from .sorting_algorithm import SortingAlgorithm
 
 # Constants
 WINDOW_TITLE = "Sorting Algorithm Visualizer"
+VERSION = "0.1.0"
 DEFAULT_DISPLAY_SIZE = (800, 600)
 DEFAULT_BACKGROUND_COLOR = "black"
 FRAME_RATE = 60
@@ -15,7 +16,7 @@ THEME_PATH = f"{os.path.dirname(os.path.realpath(__file__))}\\ui\\theme.json"
 class Game:
     def __init__(self) -> None:
         pygame.init()
-        pygame.display.set_caption(WINDOW_TITLE)
+        pygame.display.set_caption(f"{WINDOW_TITLE} {VERSION}")
 
         # Initialize Pygame and set window title
         self._display = pygame.display.set_mode(DEFAULT_DISPLAY_SIZE, pygame.RESIZABLE)
@@ -37,10 +38,23 @@ class Game:
 
         # Load sorting algorithm class to sort bars
         self._sorting_algorithm = SortingAlgorithm()
+        self._is_render = False
+        self._render = self._bars.draw
+        self._render_generator = None
 
     # Start game loop
     def start(self) -> None:
         while True:
+            if self._is_render:
+                try:
+                    pygame.time.delay(100)
+                    next(self._render_generator)
+                except StopIteration:
+                    self._is_render = False
+            elif self._bars_list != None or self._bars_list != 0:
+                bar_color = self._sidebar.bar_color_picker.current_color
+                self._bars.draw(self._bars_list, bar_color)
+
             self._handle_input()
             self._draw()
 
@@ -120,7 +134,9 @@ class Game:
             bar_color = self._sidebar.bar_color_picker.current_color
 
             self._bars_list = self._bars.generate_bars_list(bar_count)
-            self._bars.draw(self._bars_list, bar_color)
+
+            self._is_render = True
+            self._render_generator = self._render(self._bars_list, bar_color)
 
     def _start_sorting_algorithm(self, event: pygame.Event) -> None:
         if (
@@ -130,14 +146,15 @@ class Game:
             and self._bars_list != 0
         ):
             background_color = self._sidebar.background_color_picker.current_color
+            bar_color = self._sidebar.bar_color_picker.current_color
             self._bar_surface.fill(background_color)
 
             sorting_algorithm = self._sidebar.sorting_algorithm_dropdown.selected_option
             if sorting_algorithm == "Bubble Sort":
                 self._bars_list = self._sorting_algorithm.bubble_sort(self._bars_list)
 
-            bar_color = self._sidebar.bar_color_picker.current_color
-            self._bars.draw(self._bars_list, bar_color)
+            self._is_render = True
+            self._render_generator = self._render(self._bars_list, bar_color)
 
     # Updates display ever frame
     def _draw(self) -> None:

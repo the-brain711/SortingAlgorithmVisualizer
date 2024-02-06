@@ -37,3 +37,5 @@ class Bars:
                     color=color,
                     rect=(location_x, location_y, bar_width, bar_height),
                 )
+            # Yield execution of drawing bar for 100ms. Then continue
+            yield True
