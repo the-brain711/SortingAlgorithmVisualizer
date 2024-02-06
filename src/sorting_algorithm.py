@@ -1,9 +1,7 @@
-import pygame, pygame_gui
-
-
 class SortingAlgorithm:
     # Compares two adjacent elements and swaps them until they are in chronological order.
-    def bubble_sort(array: list) -> list:
+    @staticmethod
+    def bubble_sort(array: list[int]) -> list[int]:
         # Loop from 0 to length of array
         for i in range(0, len(array)):
             swapped = False
@@ -20,5 +18,4 @@ class SortingAlgorithm:
                     swapped = True
             if not swapped:
                 break
-
         return array

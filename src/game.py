@@ -36,13 +36,12 @@ class Game:
         self._sidebar = Sidebar(pygame, self._gui_manager)
 
         # Load sorting algorithm class to sort bars
-        # self._sorting_algorithm = SortingAlgorithm(pygame)
+        self._sorting_algorithm = SortingAlgorithm()
 
     # Start game loop
     def start(self) -> None:
         while True:
             self._handle_input()
-            self._game_logic()
             self._draw()
 
     def _create_surface(
@@ -73,6 +72,9 @@ class Game:
 
             # Generates new set of bars for sorting when generate/reset button is clicked
             self._generate_bars_event(event)
+
+            # Start sorting algorithm wehn start button is clicked
+            self._start_sorting_algorithm(event)
 
             self._gui_manager.process_events(event)
         self._gui_manager.update(time_delta)
@@ -120,9 +122,22 @@ class Game:
             self._bars_list = self._bars.generate_bars_list(bar_count)
             self._bars.draw(self._bars_list, bar_color)
 
-    # Where sorting algorithm logic goes
-    def _game_logic(self) -> None:
-        pass
+    def _start_sorting_algorithm(self, event: pygame.Event) -> None:
+        if (
+            event.type == pygame_gui.UI_BUTTON_PRESSED
+            and event.ui_element == self._sidebar.start_button
+            and self._bars_list != None
+            and self._bars_list != 0
+        ):
+            background_color = self._sidebar.background_color_picker.current_color
+            self._bar_surface.fill(background_color)
+
+            sorting_algorithm = self._sidebar.sorting_algorithm_dropdown.selected_option
+            if sorting_algorithm == "Bubble Sort":
+                self._bars_list = self._sorting_algorithm.bubble_sort(self._bars_list)
+
+            bar_color = self._sidebar.bar_color_picker.current_color
+            self._bars.draw(self._bars_list, bar_color)
 
     # Updates display ever frame
     def _draw(self) -> None:
